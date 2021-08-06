@@ -1,0 +1,109 @@
+SELECT * FROM `niveles` n INNER JOIN clases c ON c.id = n.id INNER JOIN usuarios u ON u.id_tipo = 3
+
+<?php
+
+  // Este es el primer set de datos que trae usuarios
+  $sqlusuario = "SELECT * from usuarios WHERE id_tipo = 3";
+  $result_usuario = mysqli_query($mysqli, $sqlusuario);
+  $rows_dbusuario = mysqli_fetch_array($result_usuario);
+
+  // Este es el segundo set de datos que trae niveles
+  $sqlniveles = "SELECT * from niveles";
+  $result_niveles = mysqli_query($mysqli,$sqlniveles);
+  $rows_dbniveles = mysqli_fetch_array($result_niveles);
+
+  // Este es el tercer set de datos que trae grupos
+  $sqlgrupos = "SELECT * from grupos";
+  $result_grupos = mysqli_query($mysqli,$sqlgrupos);
+  $rows_dbgrupo = mysqli_fetch_array($result_grupos);
+
+  // Este es el tercer set de datos que trae clases
+  $sqlclases = "SELECT * from clases";
+  $result_clases = mysqli_query($mysqli,$sqlclases);
+  $rows_dbclase = mysqli_fetch_array($result_clases);
+
+  $profesor = $rows_dbusuario['nombre'];
+  $nivel = $rows_dbniveles['nivel'];
+  $grupo = $rows_dbgrupo['grupo'];
+  $clase = $rows_dbclase['clase'];
+
+  if($rows_dbusuario){
+    
+    if ($rows_dbusuario['nombre'] == "") {
+        echo '<h3>No hay ningún profesor</h3>';
+    }
+    else if ($rows_dbusuario['id_tipo']) {
+      echo '<h3>Profesor: ' . $profesor . '</h3>';
+      echo '<h3>Nivel: ' . $nivel . '</h3>';
+      echo '<h3>grupo: ' . $grupo . '</h3>';
+      echo '<h3>clase: ' . $clase . '</h3>';
+    }
+  }
+?>
+
+SELECT DISTINCT asignacion.nom_prof, asignacion.id_tipo, asignacion.grupo, usuarios.id_tipo FROM `asignacion` INNER JOIN usuarios ON asignacion.id_tipo = usuarios.id_tipo WHERE usuarios.id_tipo = 4
+
+SELECT DISTINCT usuarios.id, usuarios.id_tipo, usuarios.nombre, usuarios.correo, asignacion.id_tipo, asignacion.grupo, asignacion_estu.grupo_estu FROM `usuarios` INNER JOIN asignacion ON usuarios.id_tipo = usuarios.id_tipo INNER JOIN asignacion_estu ON asignacion.grupo = asignacion_estu.grupo_estu WHERE nom_prof = '$NomSes' AND usuarios.id_tipo = 4
+
+SELECT DISTINCT usuarios.id, usuarios.id_tipo, usuarios.nombre, usuarios.correo, asignacion.id_tipo, asignacion.grupo, biblioteca_grupo.grupo_estu FROM `usuarios` INNER JOIN asignacion ON usuarios.id_tipo = usuarios.id_tipo INNER JOIN biblioteca_grupo ON asignacion.grupo = biblioteca_grupo.grupo_estu WHERE usuarios.id_tipo = 4
+
+
+<?php foreach($files as $file): ?>
+    <tr>
+      <td><?php echo $file['id']; ?></td>
+      <td><?php echo $file['nombre']; ?></td>
+      <td><?php echo $file['size'] / 1000 . "KB"; ?></td>
+      <td><?php echo $file['descripcion']; ?></td>
+      <td>
+        <a href="library.php?id=<?php echo $file['id'] ?>">
+          Descargar
+        </a>
+      </td>
+    </tr>
+  <?php endforeach ; ?>
+<?php else: ?>
+  <h3 class="text-center">No tiene ningun archivo este grupo</h3>
+
+<?php foreach($query as $grupos) {
+  $id = $grupos['id'];
+  $nombre = $grupos['nombre'];
+  $correo = $grupos['correo'];
+  $grupo = $grupos['grupo'];
+  $grupo_estu = $grupos['grupo_estu'];
+  $carpeta = $nivel.$grupo;
+?>
+  <tr>
+    <td><?php echo $id; ?></td>
+    <td><a href=""><?php echo $nombre; ?></a></td>
+    <td><?php echo $correo; ?></td>
+    <td><?php echo $grupo_estu; ?></td>
+    <td><?php echo $grupo; ?></td>
+  </tr>
+    
+<?php } ?>
+
+$id = $grupos['id'];
+$nombre = $grupos['nombre'];
+$correo = $grupos['correo'];
+$grupo = $grupos['grupo'];
+$grupo_estu = $grupos['grupo_estu'];
+$carpeta = $nivel.$grupo;
+
+
+<div class="card-body">
+  <div class="container mt-5">
+    <?php foreach($queryb as $q){ 
+      $titulo = $q['title'];
+      $descripcion = $q['content'];
+    ?>
+    
+    <form method="POST">
+      <input type="text" hidden value='<?php echo $q['id']?>' name="id">
+      <input type="text" placeholder="Blog Title" class="form-control my-3 bg-dark text-white text-center" name="title" value="<?php echo $titulo ?>">
+      <textarea name="content" class="form-control my-3 bg-dark text-white" cols="30"
+        rows="10"><?php echo $descripcion ?></textarea>
+      <button class="btn btn-dark" name="update">Update</button>
+    </form>
+    <?php } ?>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+#caja-chat{
+  width: 90%;
+  height: 250px;
+  overflow: auto !important;
+}
+#datos-chat{
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 5px;
+}
